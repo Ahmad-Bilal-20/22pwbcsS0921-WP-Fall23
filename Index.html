@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLMS</title>
+    <style>
+        body {
+            background-color: #0C356A;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-family: Helvetica;
+            font-weight: bold;
+            filter: blur(0.5px);
+            text-shadow: 0 0 5px #87C4FF, 0 0 10px #87C4FF, 0 0 15px #87C4FF, 0 0 20px #87C4FF;
+            color: #000000;
+        }
+
+        h2 {
+            color: #FFC436;
+            margin-top: 5%;
+            text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        li {
+            font-family: Helvetica;
+            font-weight: bold;
+            color: #ffffff;
+            display: block;
+        }
+
+        .Add_Book,
+        .Search {
+            font-family: Helvetica;
+            color: #ffffff;
+            width: 100%;
+            max-width: 500px;
+            margin: 10px;
+            padding: 15px;
+            border: 1px solid #000000;
+            border-radius: 5px;
+        }
+
+        .Add_Book form,
+        .Search form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .Add_Book form label,
+        .Search form label {
+            margin-top: 10px;
+            color: #FFC436;
+        }
+
+        .Add_Book button,
+        .Search button {
+            color: #2B3499;
+            padding: 10px 15px;
+            width: 75px;
+            margin-top: 25px;
+            margin-left: 25px;
+            border: black;
+            border-radius: 15px;
+            font-weight: bold;
+            border-radius: 15px;
+            background-color: #FFC436;
+        }
+
+        .Add_Book button:hover,
+        .Search button:hover {
+            background-color: #4a58f8;
+            color: gold;
+            font-weight: bold;
+        }
+
+        .Add_Book form input,
+        .Search form input {
+            border-radius: 15px;
+            border-color: gold;
+            width: 75%;
+            padding: 10px 25px;
+            margin-bottom: 15px;
+        }
+    </style>
+    <script>
+        function addNewBook() {
+            const bookTitle = document.getElementById('Title').value;
+            const bookAuthor = document.getElementById('Author').value;
+            const bookISBN = document.getElementById('ISBN').value;
+
+            if (bookTitle === '' || bookAuthor === '' || bookISBN === '') {
+                alert('Please fill in all the fields.');
+                return;
+            }
+
+            const bookListItems = document.querySelectorAll('#book-list li');
+            for (let i = 0; i < bookListItems.length; i++) {
+                if (bookListItems[i].textContent.toLowerCase().includes(bookTitle.toLowerCase())) {
+                    alert('This book already exists.');
+                    return;
+                }
+            }
+
+            const listItem = document.createElement('li');
+            listItem.textContent = `${bookTitle} by ${bookAuthor} (ISBN: ${bookISBN})`;
+
+            const bookList = document.getElementById('book-list');
+            bookList.appendChild(listItem);
+
+            document.getElementById('Title').value = '';
+            document.getElementById('Author').value = '';
+            document.getElementById('ISBN').value = '';
+        }
+
+       
+    function searchBook() {
+        const searchInput = document.querySelector('#searchTitle').value.toLowerCase().trim();
+        const bookListItems = document.querySelectorAll('#book-list li');
+        const searchResults = document.getElementById('search-results');
+        searchResults.innerHTML = '';
+
+        if (searchInput === '') {
+            bookListItems.forEach((book) => {
+                const copyListItem = book.cloneNode(true);
+                searchResults.appendChild(copyListItem);
+            });
+        } else {
+            let matchedBooks = [];
+
+            for (let i = 0; i < bookListItems.length; i++) {
+                const book = bookListItems[i];
+                const title = book.textContent.toLowerCase();
+
+                if (title.includes(searchInput)) {
+                    const copyListItem = book.cloneNode(true);
+                    matchedBooks.push(copyListItem);
+                }
+            }
+
+            if (matchedBooks.length > 0) {
+                matchedBooks.forEach((book) => {
+                    searchResults.appendChild(book);
+                });
+            }
+        }
+    }
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Online Library Management System</h1>
+        <h2>Book List</h2>
+        <ol id="book-list">
+            <li>The Scarlet letter by Nathaniel Hawthorne</li>
+            <li>The Godfather by Mario Puzzo</li>
+            <li>The Mist by Stephen King</li>
+            <li>Wuthering heights by Emily Bronte</li>
+            <li>Harry Potter and the Cursed Child by J.K Rowling</li>
+        </ol>
+        <div class="Add_Book">
+            <h2>Add a book</h2>
+            <form>
+                <label for="Title">Title:</label>
+                <input type="text" id="Title" placeholder="Title" required>
+                <label for="Author">Author:</label>
+                <input type="text" id="Author" placeholder="Author" required>
+                <label for="ISBN">ISBN number:</label>
+                <input type="number" id="ISBN" placeholder="Enter the number" required>
+                <button type="button" class="Add_Book" onclick="addNewBook()">Add</button>
+            </form>
+        </div>
+        <div class="Search">
+            <h2>Search a Book here</h2>
+            <form>
+                <label for="Book Title">Book Title:</label>
+                <input type="text" id="searchTitle" placeholder="Book Title" oninput="searchBook()">
+            </form>
+            <div id="search-results"></div>
+        </div>
+    </div>
+</body>
+
+</html>
