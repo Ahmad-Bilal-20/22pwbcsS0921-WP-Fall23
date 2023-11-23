@@ -1,0 +1,73 @@
+.Rec_ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.Rec_li {
+    float: left;
+    margin-right: 20px; /* Adjust the margin as needed */
+}
+
+.Rec_img {
+    max-width: 100px; /* Adjust the max-width as needed */
+    max-height: 150px; /* Adjust the max-height as needed */
+}
+
+.Rec_ul ul {
+    display: none;
+    position: absolute;
+}
+
+.Rec_li:hover > ul {
+    display: block;
+}
+
+.Recp {
+    margin: 0;
+}
+.Form_button{
+   
+    color:white;
+    background-color: black;
+    padding: 10px;
+    width: 9%;
+    border-radius: 50px;
+    border-color: rgb(91, 97, 83)
+}
+.Form_button:hover{
+      color: black;
+      background-color: white;
+      cursor: pointer;
+}
+.Categories_h1{
+    margin-left: 38%;
+    margin-top: 10%;
+}
+.Categories_Label{
+    margin-top: 25px;
+    margin-left: 36%;
+    padding: 22px;
+    font-weight: bold;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+.Categories_List{
+padding: 2px 3px;
+border-radius: 55px;
+background-color: black;
+color: white;
+}
+.Categories_button{
+    background-color: #4caf50;
+    color: white;
+    padding: 1px 4px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px; 
+    margin-left: 1%;
+}
+.Categories_button:hover{
+    background-color: #45a049;
+}

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookstore</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">BooksForNerds</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="cart.html">Cart</a>
+                  </li>
+                 
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="contact.html">Contact</a>
+                  </li>
+                </ul>
+            
+              </div>
+            </div>
+          </nav>
+    </header>
+    <div class="container mt-sm-5">
+        <div class="accordion">
+            <div class="col-md-4">
+                <h2>Available Books</h2>
+                <ul id="bookList" class="list-group">
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h2>Selected Book Details</h2>
+                <table class="table table-sm">
+
+                    </thead>
+                    <tbody id="selectedBookDetails">
+                    </tbody>
+                </table>
+                <div>
+                    <strong>Total Price: $<span id="totalPrice">0.00</span></strong>
+                </div>
+                <button class="Categories_button" onclick="proceedToPayment()">Proceed to Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const books = [
+          
+  {
+    "id": 10,
+    "title": "The Da Vinci Code",
+    "author": "Dan Brown",
+    "category": "Mystery",
+    "price": 14.25,
+    "description": "Mystery thriller novel.",
+    "cover_image": "Images/Davinvi_code.jpg"
+  },
+            {
+                "id": 17,
+    "title": "The Road",
+    "author": "Cormac McCarthy",
+    "category": "Dystopian",
+    "price": 13.75,
+    "description": "Post-apocalyptic novel.",
+    "cover_image": "Images/The-road.jpg"
+            },
+            {
+                "id": 23,
+    "title": "The Odyssey",
+    "author": "Homer",
+    "category": "Classic",
+    "price": 10.25,
+    "description": "Ancient Greek epic poem.",
+    "cover_image": "Images/The Odyssey.jpg"
+  }
+        ];
+
+        const cart = [];
+        let totalSelectedPrice = 0;
+
+        function displayBooks() {
+            const bookList = document.getElementById("bookList");
+            bookList.innerHTML = "";
+
+            books.forEach(book => {
+                const listItem = document.createElement("li");
+                listItem.classList.add("list-group-item");
+                listItem.innerHTML = `
+                    <h3>${book.title}</h3>
+                    <p>Author: ${book.author}</p>
+                    <p>Category: ${book.category}</p>
+                    <p>Price: $${book.price.toFixed(2)}</p>
+                    <button class="btn btn-primary" onclick="showBookDetails(${book.id})">Select</button>
+                `;
+
+                bookList.appendChild(listItem);
+            });
+        }
+
+        function showBookDetails(bookId) {
+            const selectedBook = books.find(book => book.id === bookId);
+
+            const detailsElement = document.getElementById("selectedBookDetails");
+
+            const detailsRow = document.createElement("tr");
+            detailsRow.id = `bookRow_${selectedBook.id}`;
+            detailsRow.innerHTML = `
+                <td>${selectedBook.title}</td>
+                <td>${selectedBook.author}</td>
+                <td>${selectedBook.category}</td>
+                <td>$${selectedBook.price.toFixed(2)}</td>
+                <td><input type="number" id="quantity_${selectedBook.id}" value="1" min="1" onchange="updateQuantity(${selectedBook.id}, this.value)"></td>
+                <td>
+                    <button class="btn btn-danger" onclick="removeFromCart(${selectedBook.id})">Delete</button>
+                </td>
+            `;
+
+            detailsElement.appendChild(detailsRow);
+
+            addToCart(selectedBook.id);
+        }
+
+        function updateQuantity(bookId, quantity) {
+            const cartItem = cart.find(item => item.id === bookId);
+
+            if (cartItem) {
+                cartItem.quantity = parseInt(quantity, 10);
+                updateSelectedBooks();
+            }
+        }
+
+        function addToCart(bookId) {
+            const quantityInput = document.getElementById(`quantity_${bookId}`);
+            const quantity = parseInt(quantityInput.value);
+            const selectedBook = books.find(book => book.id === bookId);
+
+            const existingCartItem = cart.find(item => item.id === bookId);
+
+            if (existingCartItem) {
+                existingCartItem.quantity += quantity;
+            } else {
+                cart.push({
+                    ...selectedBook,
+                    quantity
+                });
+            }
+
+            updateSelectedBooks();
+        }
+
+        function removeFromCart(bookId) {
+            const index = cart.findIndex(item => item.id === bookId);
+
+            if (index !== -1) {
+                cart.splice(index, 1);
+                updateSelectedBooks();
+            }
+        }
+
+        function updateSelectedBooks() {
+            const detailsElement = document.getElementById("selectedBookDetails");
+            detailsElement.innerHTML = "";
+            totalSelectedPrice = 0;
+
+            cart.forEach(item => {
+                const detailsRow = document.createElement("tr");
+                detailsRow.id = `bookRow_${item.id}`;
+                detailsRow.innerHTML = `
+                    <td>${item.title}</td>
+                    <td>${item.author}</td>
+                    <td>${item.category}</td>
+                    <td>$${item.price.toFixed(2)}</td>
+                    <td><input type="number" id="quantity_${item.id}" value="${item.quantity}" min="1" onchange="updateQuantity(${item.id}, this.value)"></td>
+                    <td>
+                        <button class="btn btn-danger" onclick="removeFromCart(${item.id})">Delete</button>
+                    </td>
+                `;
+                detailsElement.appendChild(detailsRow);
+
+                totalSelectedPrice += item.price * item.quantity;
+            });
+
+            const totalPriceElement = document.getElementById("totalPrice");
+            totalPriceElement.textContent = totalSelectedPrice.toFixed(2);
+        }
+
+        function proceedToPayment() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+            localStorage.setItem('totalPrice', totalSelectedPrice.toFixed(2));
+            window.location.href = 'payment.html';
+        }
+
+        displayBooks();
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Library</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+      
+      document.addEventListener('DOMContentLoaded', () => {
+            fetch("books.json")
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok.");
+                    }
+                    return response.json();
+                })
+                .then((books) => {
+                    let html = "";
+                    // Limit the number of books displayed to 5 or 6
+                    const numBooksToDisplay = 5;
+                    const booksToDisplay = books.slice(0, numBooksToDisplay);
+
+                    booksToDisplay.forEach((book) => {
+                        // Your existing code to generate HTML for each book
+                        // ...
+
+                        html += htmlSegment;
+                    });
+
+                    let container = document.querySelector(".books");
+                    container.innerHTML = html;
+                })
+                .catch((error) => {
+                    console.error("Error fetching data:", error);
+                });
+        });
+      let cart = [];
+    
+      function addToCart(book) {
+        cart.push(book);
+        updateCart();
+      }
+    
+      function updateCart() {
+    
+        console.log(cart);
+      }
+    
+      document.addEventListener('DOMContentLoaded', () => {
+        fetch("books.json")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok.");
+            }
+            return response.json();
+          })
+          .then((books) => {
+            let html = "";
+            books.forEach((book) => {
+              let htmlSegment = `<div class="book card col-md-4 p-0 my-4 mx-2 " style="width: 16rem; height: 100%">
+                                    
+                                      <img class="card-img-top px-0" src="${book.cover_image}">
+                                    
+                                      <div class="card-body">
+                                        <h2>${book.title} By ${book.author}</h2>
+                                        <h3 class="py-1">${book.category}</h3>
+                                        <h1 class="py-1">${book.price}</h1>
+                                        <p>${book.description}</p>
+                                        <div class="d-flex">
+                                          <button class="btn btn-sm btn-primary" onclick="addToCart(${JSON.stringify(book)})">Add to Cart</button>
+                                          <a href="#" class="btn btn-sm mx-1 btn-primary">View to Chart</a>
+                                        </div>
+                                      </div>
+                                  </div>`;
+    
+              html += htmlSegment;
+            });
+    
+            let container = document.querySelector(".books");
+            container.innerHTML = html;
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
+    
+      
+    
+      });
+    
+      function generateReceipt() {
+
+  const totalPayment = cart.reduce((total, book) => total + parseFloat(book.price), 0);
+
+ 
+  const cartURL = `cart.html?books=${encodeURIComponent(JSON.stringify(cart))}&total=${totalPayment}`;
+
+ 
+  window.location.href = cartURL;
+}
+
+    </script>
+    
+    
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">BooksForNerds</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="cart.html">Cart</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Categories
+              </a>
+              <ul class="dropdown-menu" disabled>
+                  <li><a class="dropdown-item" href="#">Adventure</a></li>
+                  <li><a class="dropdown-item" href="#">Autobiographical</a></li>
+                  <li><a class="dropdown-item" href="#">Fiction</a></li>
+                  <li><a class="dropdown-item" href="#">Science Fiction</a></li>
+                  <li><a class="dropdown-item" href="#">Historical Fiction</a></li>
+                  <li><a class="dropdown-item" href="#">Dystopian</a></li>
+                  <li><a class="dropdown-item" href="#">Classic</a></li>
+                  <li><a class="dropdown-item" href="#">Fantasy</a></li>
+                  <li><a class="dropdown-item" href="#">Mystery</a></li>
+                  <li><a class="dropdown-item" href="#">Horror</a></li>
+                  <li><a class="dropdown-item" href="#">Gothic</a></li>
+                  <li><a class="dropdown-item" href="#">Philosophical</a></li>
+                  <li><a class="dropdown-item" href="#">Contemporary</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li class="nav-item">
+                      <a class="nav-link active" aria-current="page" href="categories.html">Go to Categories page</a>
+                  </li>
+              </ul>
+          </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="contact.html">Contact</a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </nav>
+    <div id="carouselExample" class="carousel slide">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="Background Images.jpg" class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item">
+          <img src="Novels for background.jpg" class="d-block w-100" alt="...">
+        </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+    <h1 style="margin-top: 10%; display: flex;">Our Top seller</h1>
+    <ul style="display: flex; justify-content: space-between;">
+      
+    <li style="list-style: none;"><img src="Anna Karenina.jpeg" alt="Book1"><ul>
+      <p><b>Title</b>: Anna Karenina</p>
+      <p><b>Author</b>: Leo Tolstoy</p>
+      <p><b>Genre</b>: Classic</p>
+      <p><b>Price</b>: 12.75$</p>
+    </ul></li>
+    <li style="list-style: none;"><img src="The Alchemist.jpeg" alt="Book1"><ul>
+      <p><b>Title</b>: The Alchemist</p>
+      <p><b>Author</b>: Paulo Coelho</p>
+      <p><b>Genre</b>: Fiction</p>
+      <p><b>Price</b>: 10.50$</p>
+    </ul></li>
+    <li style="list-style: none;"><img src="The Stand.jpeg" alt="Book1"><ul>
+      <p><b>Title</b>: The Stand</p>
+      <p><b>Author</b>: Stephen King</p>
+      <p><b>Genre</b>: Horror</p>
+      <p><b>Price</b>: 14.50$</p>
+    </ul></li></ul></li></div>
+    </ul>
+    <h1 style="margin-top: 10%;;">Recommended</h1>
+    <ul style="display: flex;justify-content:space-between;">
+
+      <li style="list-style: none;"><img src="Anna Karenina.jpeg" alt="Book1"><ul>
+        <p><b>Title</b>: Anna Karenina</p>
+        <p><b>Author</b>: Leo Tolstoy</p>
+        <p><b>Genre</b>: Classic</p>
+        <p><b>Price</b>: 12.75$</p>
+      </ul></li>
+      <li style="list-style: none;"><img src="A Tale of Two Cities.jpg" alt="Book2" sizes="25px"><ul>
+        <p><b>Title</b>: A Tale of two Cities</p>
+        <p><b>Author</b>: Charles Dickens</p>
+        <p><b>Genre</b>: Classic</p>
+        <p><b>Price</b>:12.25$</p>
+      </ul></li>
+      <li style="list-style: none;"><img src="The Stand.jpeg" alt="Book3"><ul>
+        <p><b>Title</b>: The Stand</p>
+        <p><b>Author</b>: Stephen King</p>
+        <p><b>Genre</b>: Horror</p>
+        <p><b>Price</b>: 14.50$</p>
+    </ul>
+  </div>
+  <div class="books"></div>
+</body>
+</html>
